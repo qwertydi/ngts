@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+
+$api = app('Dingo\Api\Routing\Router');
+
+//Show user info via restful service.
+$api->version('v1', function ($api) {
+    $api->get('devices', 'App\Http\Controllers\DevicesController@devicesByUser');
 });
+    

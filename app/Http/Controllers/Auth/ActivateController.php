@@ -99,10 +99,10 @@ class ActivateController extends Controller
 
         $rCheck = $this->activeRedirect($user, $currentRoute);
         if ($rCheck) {
-            return $rCheck;
+            return true;
         }
 
-        if ($user->activated == false) {
+        /*if ($user->activated == false) {
             $activationsCount = Activation::where('user_id', $user->id)
                 ->where('created_at', '>=', Carbon::now()->subHours(config('settings.timePeriod')))
                 ->count();
@@ -117,7 +117,7 @@ class ActivateController extends Controller
 
                 return view('auth.exceeded')->with($data);
             }
-        }
+        }*/
 
         Log::info('Registered attempted to navigate while unactivate. '.$currentRoute.'. ', [$user]);
 

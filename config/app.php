@@ -136,7 +136,8 @@ return [
     */
 
     'providers' => [
-
+        //dingo
+        Dingo\Api\Provider\LaravelServiceProvider::class,
         /*
          * Laravel Framework Service Providers...
          */
@@ -189,7 +190,6 @@ return [
         App\Providers\LocalEnvironmentServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         jeremykenedy\laravelexceptionnotifier\LaravelExceptionNotifier::class,
-
     ],
 
     /*

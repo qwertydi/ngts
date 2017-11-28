@@ -57,7 +57,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $data['captcha'] = $this->captchaCheck();
-
+        $data['captcha'] = true;
         if (!config('settings.reCaptchStatus')) {
             $data['captcha'] = true;
         }
@@ -109,7 +109,7 @@ class RegisterController extends Controller
                 'password'          => bcrypt($data['password']),
                 'token'             => str_random(64),
                 'signup_ip_address' => $ipAddress->getClientIp(),
-                'activated'         => !config('settings.activation'),
+                'activated'         => true,
             ]);
 
         $user->attachRole($role);

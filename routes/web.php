@@ -29,7 +29,7 @@ Route::group(['middleware' => ['web', 'activity']], function () {
     Route::get('/activation', ['as' => 'authenticated.activation-resend', 'uses' => 'Auth\ActivateController@resend']);
     Route::get('/exceeded', ['as' => 'exceeded', 'uses' => 'Auth\ActivateController@exceeded']);
 
-    // Socialite Register Routes
+    // Socialite 'Register Routes
     Route::get('/social/redirect/{provider}', ['as' => 'social.redirect', 'uses' => 'Auth\SocialController@getSocialRedirect']);
     Route::get('/social/handle/{provider}', ['as' => 'social.handle', 'uses' => 'Auth\SocialController@getSocialHandle']);
 
@@ -46,6 +46,9 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     //  Homepage Route - Redirect based on user role is in controller.
     Route::get('/home', ['as' => 'public.home',   'uses' => 'UserController@index']);
+
+    //  Homepage Route - Redirect based on user role is in controller.
+    Route::get('/devices', ['uses' => 'DevicesController@devicesByUser'])->name('devices');
 
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [

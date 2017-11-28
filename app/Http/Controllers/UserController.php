@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Dingo\Api\Routing\Router;
 
 class UserController extends Controller
 {
