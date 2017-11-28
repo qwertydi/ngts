@@ -41,7 +41,7 @@
 									<td>{{$device->owner_id}}</td>
 									<td>{{$device->name}}</td>
 									<td>{{$device->ip_address}}</td>
-									<td>{{$device->status}</td>
+									<td>{{$device->active}}</td>
 									</tr>
 								@endforeach
 							</tbody>

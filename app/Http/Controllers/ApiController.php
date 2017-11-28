@@ -1,10 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\TodoRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Device;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -65,9 +69,22 @@ class ApiController extends Controller
                 $error = true;
                 $errors = $validator->errors();
             }
+        }elseif($type == "create device"){
+            $validator = Validator::make($request->all(),[
+                'owner_id' => 'required',
+                'name' => 'required',
+                'ip_address' => 'required',
+                'active' => 'required'
+            ]);
+            if($validator->fails()){
+                $error = true;
+                $errors = $validator->errors();
+            }
         }
+
         return ["error" => $error,"errors"=>$errors];
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -78,16 +95,44 @@ class ApiController extends Controller
     {
         return ['status' => $status,'data'=> $data,'message' => $msg,'errors' => $errors];
     }
+
     /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function devicesUser(Request $request)
     {
-        return $this->prepareResult(true, $request->user()->todo()->get(), [],"All user todos");
+        $devices = DB::table('devices')->where('owner_id',$request->user()->id)->get();
+
+        $data = [
+            'devices' => $devices,
+        ];
+
+        return ['status' => $devices];
     }
+
+    public function deviceAdd(Request $request)
+    {
+        //return ['status' => 'LOLE'];
+        $error = $this->validations($request,"create device");
+        if ($error['error']) {
+            return $this->prepareResult(false, [], $error['errors'],"Error in creating todo");
+        } else {
+            //$device = $request->owner_id;
+            $device = DB::table('devices')->insert(['owner_id' => $request->owner_id, 'name' => $request->name, 'ip_address' => $request->ip_address, 'active' => $request->active]);
+
+            return $this->prepareResult(true, $device, $error['errors'],"Device created");
+        }
+    }
+    
+    public function user(Request $request)
+    {
+        return $request->user();
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -101,58 +146,5 @@ class ApiController extends Controller
         }else{
             return $this->prepareResult(false, [], "unauthorized","You are not authenticated to view this todo");
         }
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $error = $this->validations($request,"create todo");
-        if ($error['error']) {
-            return $this->prepareResult(false, [], $error['errors'],"Error in creating todo");
-        } else {
-            $todo = $request->user()->todo()->Create($request->all());
-            return $this->prepareResult(true, $todo, $error['errors'],"Todo created");
-        }
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Todo $todo)
-    {
-        if($todo->user_id == $request->user()->id){
-           $error = $this->validations($request,"update todo");
-            if ($error['error']) {
-                return $this->prepareResult(false, [], $error['errors'],"error in updating data");
-            } else {
-                $todo = $todo->fill($request->all())->save();
-                return $this->prepareResult(true, $todo, $error['errors'],"updating data");
-            }
-        }else{
-            return $this->prepareResult(false, [], "unauthorized","You are not authenticated to edit this todo");
-        }
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Todo $todo)
-    {
-        if($todo->user_id == $request->user()->id){
-            if ($todo->delete()) {
-                return $this->prepareResult(true, [], [],"Todo deleted");
-            }
-        }else{
-            return $this->prepareResult(false, [], "unauthorized","You are not authenticated to delete this todo");
-        }        
     }
 }

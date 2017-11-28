@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
 use Laravel\Passport\HasApiTokens;
 
-
 class User extends Authenticatable
 {
     use HasRoleAndPermission;
@@ -93,6 +92,16 @@ class User extends Authenticatable
     public function profiles()
     {
         return $this->belongsToMany('App\Models\Profile')->withTimestamps();
+    }
+
+     /**
+     * Build Devices Relationships.
+     *
+     * @var array
+     */
+    public function devices()
+    {
+        return $this->hasMany('App\Models\Device');
     }
 
     public function hasProfile($name)
