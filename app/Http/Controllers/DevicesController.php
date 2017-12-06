@@ -53,6 +53,31 @@ class DevicesController extends Controller
     }
     
     /**
+     * Display the specified resource.
+     *
+     * @param string $username
+     *
+     * @return Response
+     */
+    public function deviceHistory($id)
+    {
+        $user = Auth::user();
+        $device = DB::table('devices')->where('id',$id)->get();
+        // TODO Device History
+        $str_id;
+        foreach ($device as $d) {
+            $str_id = $d->id;
+        }
+        $data = [
+            'user' => $user,
+            'device' => $device,
+            'id' => $str_id,
+        ];
+
+        return view('devices.device')->with($data);
+    }
+    
+    /**
      * Fetch user
      * (You can extract this to repository method).
      *

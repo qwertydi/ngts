@@ -41,6 +41,12 @@
                     <li><a href="{{ route('devices') }}">My Devices</a></li>
                 </ul>
                  </li>
+                 <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Stream<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ route('stream') }}">My Stream</a></li>
+                </ul>
+                 </li>
                 @endif
             </ul>
 

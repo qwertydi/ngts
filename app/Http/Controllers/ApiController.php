@@ -9,27 +9,34 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Device;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ApiController extends Controller
 {
-    public function accessToken(Request $request)
-    {
-        $validate = $this->validations($request,"login");
-        if($validate["error"]){
-            return $this->prepareResult(false, [], $validate['errors'],"Error while validating user"); 
+    public $successStatus = 200;
+    
+    public function login(){
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
+            return response()->json(['success' => $success], $this->successStatus);
         }
-        $user = User::where("email",$request->email)->first();
-        if($user){
-            if (Hash::check($request->password,$user->password)) {
-                return $this->prepareResult(true, ["accessToken" => $user->createToken('Todo App')->accessToken], [],"User Verified");
-            }else{
-                return $this->prepareResult(false, [], ["password" => "Wrong passowrd"],"Password not matched");  
-            }
-        }else{
-            return $this->prepareResult(false, [], ["email" => "Unable to find user"],"User not found");
+        else{
+            return response()->json(['error'=>'Unauthorised'], 401);
         }
-        
     }
+
+    public function stream(Request $request) {
+        if(Request::hasFile('file')){
+            $file = Request::file('file');
+            $filename = $file->getClientOriginalName();
+            var_dump($filename);
+            $path = public_path().'/uploads/';
+            return $file->move($path, $filename);
+        }
+    }
+    
+
     /**
      * Get a validator for an incoming Todo request.
      *
@@ -71,7 +78,7 @@ class ApiController extends Controller
             }
         }elseif($type == "create device"){
             $validator = Validator::make($request->all(),[
-                'owner_id' => 'required',
+                //'owner_id' => 'required',
                 'name' => 'required',
                 'ip_address' => 'required',
                 'active' => 'required'
@@ -97,10 +104,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Display a listing of devices.
      */
     public function devicesUser(Request $request)
     {
@@ -113,25 +117,28 @@ class ApiController extends Controller
         return ['status' => $devices];
     }
 
+    /**
+     * Add a device
+     */
     public function deviceAdd(Request $request)
     {
-        //return ['status' => 'LOLE'];
         $error = $this->validations($request,"create device");
         if ($error['error']) {
             return $this->prepareResult(false, [], $error['errors'],"Error in creating todo");
         } else {
-            //$device = $request->owner_id;
-            $device = DB::table('devices')->insert(['owner_id' => $request->owner_id, 'name' => $request->name, 'ip_address' => $request->ip_address, 'active' => $request->active]);
+            $device = DB::table('devices')->insert(['owner_id' => $request->user()->id, 'name' => $request->name, 'ip_address' => $request->ip_address, 'active' => $request->active]);
 
             return $this->prepareResult(true, $device, $error['errors'],"Device created");
         }
     }
     
+    /**
+     * Current user information
+     */
     public function user(Request $request)
     {
         return $request->user();
     }
-
 
     /**
      * Display the specified resource.
@@ -146,5 +153,27 @@ class ApiController extends Controller
         }else{
             return $this->prepareResult(false, [], "unauthorized","You are not authenticated to view this todo");
         }
+    }
+
+    /**
+     * Metodo antigo
+     */
+    public function accessToken(Request $request)
+    {
+        $validate = $this->validations($request,"login");
+        if($validate["error"]){
+            return $this->prepareResult(false, [], $validate['errors'],"Error while validating user"); 
+        }
+        $user = User::where("email",$request->email)->first();
+        if($user){
+            if (Hash::check($request->password,$user->password)) {
+                return $this->prepareResult(true, ["accessToken" => $user->createToken('Todo App')->accessToken], [],"User Verified");
+            }else{
+                return $this->prepareResult(false, [], ["password" => "Wrong passowrd"],"Password not matched");  
+            }
+        }else{
+            return $this->prepareResult(false, [], ["email" => "Unable to find user"],"User not found");
+        }
+        
     }
 }

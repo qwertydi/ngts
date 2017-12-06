@@ -32,6 +32,7 @@
 									<th>Device Name</th>
 									<th>IP Address</th>
 									<th>Status</th>
+									<th>Device Log</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -42,6 +43,9 @@
 									<td>{{$device->name}}</td>
 									<td>{{$device->ip_address}}</td>
 									<td>{{$device->active}}</td>
+									<td>
+									<a class="btn btn-sm btn-success " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Show History</span>
+                                    </a></td>
 									</tr>
 								@endforeach
 							</tbody>
@@ -53,3 +57,4 @@
 		</div>
 	</div>
 @endsection
+

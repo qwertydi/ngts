@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,26 +12,23 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-/*Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-//$api->get('devices', 'App\Http\Controllers\DevicesController@devicesByUser');
-
 $api = app('Dingo\Api\Routing\Router');
 
 //Show user info via restful service.
 $api->version('v1', function ($api) {
-    $api->get('/login','App\Http\Controllers\ApiController@accessToken');
+    $api->post('/login','App\Http\Controllers\ApiController@login');
     // NOT TESTED
     $api->group(['middleware' => ['web','auth:api']], function($api)
     {
         $api->get('/user', 'App\Http\Controllers\ApiController@user');
         $api->get('/devices','App\Http\Controllers\ApiController@devicesUser');
-        $api->get('/devices/add','App\Http\Controllers\ApiController@deviceAdd');
+        $api->post('/devices/add','App\Http\Controllers\ApiController@deviceAdd');
+        $api->post('/stream','App\Http\Controllers\ApiController@stream');
+        // TODO       
         $api->post('/todo/','App\Http\Controllers\ApiController@show');
         $api->get('/todo/{todo}','App\Http\Controllers\ApiController@show');
         $api->put('/todo/{todo}','App\Http\Controllers\ApiController@update');
         $api->delete('/todo/{todo}','App\Http\Controllers\ApiController@destroy');
     });
+    $api->post('/devices/upload','App\Http\Controllers\ApiController@stream');
 });

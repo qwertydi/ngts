@@ -50,6 +50,15 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
     //  Homepage Route - Redirect based on user role is in controller.
     Route::get('/devices', ['uses' => 'DevicesController@devicesByUser'])->name('devices');
 
+    //  Video Streaming
+    Route::get('/stream', ['uses' => 'VideoController@streamVideo'])->name('stream');
+
+    // Show users profile - viewable by other users.
+    Route::get('/devices/{id}', [
+        'as'   => '{id}',
+        'uses' => 'DevicesController@deviceHistory',
+    ]);
+
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [
         'as'   => '{username}',
