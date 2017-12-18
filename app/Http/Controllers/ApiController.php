@@ -6,10 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TodoRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 use App\Models\User;
 use App\Models\Device;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use File;
+use Image;
 
 class ApiController extends Controller
 {
@@ -27,13 +31,28 @@ class ApiController extends Controller
     }
 
     public function stream(Request $request) {
-        if(Request::hasFile('file')){
+/*$thaimage = $request->file('image_frame');
+        $bytes1 = File::size($request->file('image_frame'));
+        $bytes = Image::make($request->file('image_frame'))->resize(200, 200)->save();
+        return ["request" =>  Storage::disk('uploads')];
+        $path = Storage::disk('uploads')->put('filename.png', $request->file('image_frame'));
+        $contents = Storage::disk('uploads')->exists('filename.png');
+        $image = Storage::disk('uploads')->get('filename.png');
+        return ["request" =>  $image];*/
+       // Storage::disk('uploads')->put('filename', $request->all());
+       // $fileData = file_get_contents($localFileName);
+        //$ImgfileEncode = base64_encode($fileData);
+       // $file = Storage::disk('uploads')->get('filename');
+
+       // return ["request" =>  $file];
+        /* 
+            if(Request::hasFile('file')){
             $file = Request::file('file');
             $filename = $file->getClientOriginalName();
             var_dump($filename);
             $path = public_path().'/uploads/';
             return $file->move($path, $filename);
-        }
+        }*/
     }
     
 
