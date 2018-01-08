@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use App\Models\User;
 use App\Models\Device;
+use App\Models\Motion;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use File;
@@ -30,29 +31,93 @@ class ApiController extends Controller
         }
     }
 
-    public function stream(Request $request) {
-/*$thaimage = $request->file('image_frame');
-        $bytes1 = File::size($request->file('image_frame'));
-        $bytes = Image::make($request->file('image_frame'))->resize(200, 200)->save();
-        return ["request" =>  Storage::disk('uploads')];
-        $path = Storage::disk('uploads')->put('filename.png', $request->file('image_frame'));
-        $contents = Storage::disk('uploads')->exists('filename.png');
-        $image = Storage::disk('uploads')->get('filename.png');
-        return ["request" =>  $image];*/
-       // Storage::disk('uploads')->put('filename', $request->all());
-       // $fileData = file_get_contents($localFileName);
-        //$ImgfileEncode = base64_encode($fileData);
-       // $file = Storage::disk('uploads')->get('filename');
+    /**
+     * Add a device
+     */
+    public function addDeviceFromPost(Request $request)
+    {
+        $error = $this->validations($request,"create device");
+        if ($error['error']) {
+            return $this->prepareResult(false, [], $error['errors'],"Error in adding device");
+        } else {
+            $device = Device::where('mac_address', '=', $request->mac_address)->get();
+            $add = true;
+            foreach($device as $d){
+                if($d->mac_address == $request->mac_address){
+                    $add = false;
+                    return response()->json(['error'=>'Mac address already exist for this user!'], 401);
+                }else{
+                    $add = true;
+                }
+            }
+            if($add){
+                $add = new Device();
+                $add->owner_id = $request->user()->id;
+                $add->timestamps = false;
+                $add->name =  $request->name;
+                $add->ip_address = $request->ip_address;
+                $add->mac_address = $request->mac_address;
+                $add->active = $request->active;
+                $add->save();
+            }
+            
+            return $this->prepareResult(true, $device, $error['errors'],"Device created");
+        }
+    }
 
-       // return ["request" =>  $file];
-        /* 
-            if(Request::hasFile('file')){
-            $file = Request::file('file');
-            $filename = $file->getClientOriginalName();
-            var_dump($filename);
-            $path = public_path().'/uploads/';
-            return $file->move($path, $filename);
-        }*/
+    /**
+     * Add a device
+     */
+    public function deleteDeviceFromMAC(Request $request)
+    {
+        $error = $this->validations($request,"delete device");
+        if ($error['error']) {
+            return $this->prepareResult(false, [], $error['errors'],"Error in deleting device");
+        } else {
+            $exists = DB::table('devices')->where('mac_address', $request->mac_address)->select();
+            // TODO
+            var_dump($exist);
+	        /*if($exists) {
+                $device = DB::table('devices')->where('mac_address', $request->mac_address)->delete();
+                return response()->json(['error'=>'Device deleted']);
+            } else {
+                return response()->json(['error'=>'Device doenst\'t exists']);
+            }*/
+        }
+    }
+
+    /**
+     * Motion updater
+     */
+    public function addMotionFromPost(Request $request)
+    {
+        $error = $this->validations($request,"add motion");
+        if ($error['error']) {
+            return $this->prepareResult(false, [], $error['errors'],"Error on adding motion");
+        } else {
+            // check if parent exist!
+            if(Device::findOrFail($request->device_id)){
+                $add = new Motion();
+                $add->device_id = $request->device_id;
+                $add->timestamps = false;
+                $add->date =  date('Y-m-d H:i:s');
+                $add->stream = $request->stream;
+                $add->picture = $request->picture;
+                $add->save();
+            } else {
+                return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
+            }
+               
+        }
+        return $this->prepareResult(true, $add, $error['errors'],"Motion added");
+    }
+    
+
+    /**
+     * Stream updater
+     */
+    public function stream(Request $request) {
+        // TODO
     }
     
 
@@ -75,21 +140,21 @@ class ApiController extends Controller
                 $error = true;
                 $errors = $validator->errors();
             }
-        }elseif($type == "create todo"){
+        }elseif($type == "delete device"){
             $validator = Validator::make($request->all(),[
-                'todo' => 'required',
-                'description' => 'required',
-                'category' => 'required'
+                'mac_address' => 'required'
             ]);
             if($validator->fails()){
                 $error = true;
                 $errors = $validator->errors();
             }
-        }elseif($type == "update todo"){
+        }elseif($type == "add motion"){
             $validator = Validator::make($request->all(),[
-                'todo' => 'filled',
-                'description' => 'filled',
-                'category' => 'filled'
+                'device_id' => 'filled',
+                'date' => 'filled',
+                'hour' => 'filled',
+                'stream' => 'filled',
+                'picture' => 'filled'
             ]);
             if($validator->fails()){
                 $error = true;
@@ -100,7 +165,8 @@ class ApiController extends Controller
                 //'owner_id' => 'required',
                 'name' => 'required',
                 'ip_address' => 'required',
-                'active' => 'required'
+                'active' => 'required',
+                'mac_address' => 'required'
             ]);
             if($validator->fails()){
                 $error = true;
@@ -134,21 +200,6 @@ class ApiController extends Controller
         ];
 
         return ['status' => $devices];
-    }
-
-    /**
-     * Add a device
-     */
-    public function deviceAdd(Request $request)
-    {
-        $error = $this->validations($request,"create device");
-        if ($error['error']) {
-            return $this->prepareResult(false, [], $error['errors'],"Error in creating todo");
-        } else {
-            $device = DB::table('devices')->insert(['owner_id' => $request->user()->id, 'name' => $request->name, 'ip_address' => $request->ip_address, 'active' => $request->active]);
-
-            return $this->prepareResult(true, $device, $error['errors'],"Device created");
-        }
     }
     
     /**

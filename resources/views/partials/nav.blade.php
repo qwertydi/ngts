@@ -39,12 +39,14 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Devices<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ route('devices') }}">My Devices</a></li>
+                    <li><a href="{{ route('devices.add') }}">Add device</a></li>
                 </ul>
                  </li>
                  <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Stream<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Alarms<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ route('stream') }}">My Stream</a></li>
+                    <li><a href="{{ route('alarms') }}">My alarms</a></li>
+                    <li><a href="{{ route('alarms.add') }}">Add alarm</a></li>
                 </ul>
                  </li>
                 @endif

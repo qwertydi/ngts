@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Device extends Model
+class Motion extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'devices';
+    protected $table = 'motion';
 
     /**
      * The attributes that are not mass assignable.
@@ -26,30 +26,18 @@ class Device extends Model
      * @var array
      */
     protected $fillable = [
-        'owner_id',
-        'name',
-        'ip_address',
-        'active',
-        'mac_address',
+        'device_id',
+        'stream',
+        'picture'
     ];
     
     /**
-     * A device belongs to a user.
+     * A motion belongs to a device.
      *
      * @return mixed
      */
-    public function user()
+    public function device()
     {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    /**
-     * Build Devices Relationships.
-     *
-     * @var array
-     */
-    public function motion()
-    {
-        return $this->hasMany('App\Models\Motion');
+        return $this->belongsTo('App\Models\Device');
     }
 }

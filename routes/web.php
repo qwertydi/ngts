@@ -39,7 +39,6 @@ Route::group(['middleware' => ['web', 'activity']], function () {
 
 // Registered and Activated User Routes
 Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
-
     // Activation Routes
     Route::get('/activation-required', ['uses' => 'Auth\ActivateController@activationRequired'])->name('activation-required');
     Route::get('/logout', ['uses' => 'Auth\LoginController@logout'])->name('logout');
@@ -50,6 +49,9 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
     //  Homepage Route - Redirect based on user role is in controller.
     Route::get('/devices', ['uses' => 'DevicesController@devicesByUser'])->name('devices');
 
+    //  Homepage Route - Redirect based on user role is in controller.
+    Route::get('/devices/add', ['uses' => 'DevicesController@addDevice'])->name('devices.add');
+
     //  Video Streaming
     Route::get('/stream', ['uses' => 'VideoController@streamVideo'])->name('stream');
 
@@ -58,6 +60,24 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
         'as'   => '{id}',
         'uses' => 'DevicesController@deviceHistory',
     ]);
+
+    Route::get('/devices/{id}/surveillance', [ 'uses' => 'DevicesController@surveillance'])->name('surveillance');
+
+    Route::get('/alarms', [ 'uses' => 'DevicesController@alarms'])->name('alarms');
+
+    Route::get('/alarms/add', [ 'uses' => 'DevicesController@addAlarms'])->name('alarms.add');
+
+    Route::get('/alarms/{id}/delete', [ 'uses' => 'DevicesController@deleteAlarm'])->name('alarms.delete');
+
+    Route::get('/alarms/{id}/edit', [ 'uses' => 'DevicesController@editAlarm'])->name('alarms.edit');
+
+    Route::post('/devices/store', [ 'uses' => 'DevicesController@store']);
+
+    Route::post('/email', [ 'uses' => 'DevicesController@sendMail'])->name('email');
+    
+    Route::delete('/devices/deleteDevice/{id}', [ 'uses' => 'DevicesController@deleteDevice'])->name('delete.device');
+
+    Route::delete('/devices/{id}/deleteHistory/{m_id}', [ 'uses' => 'DevicesController@motionDeleteHistory'])->name('delete.motion');
 
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [
