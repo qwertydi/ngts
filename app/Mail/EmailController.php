@@ -19,9 +19,9 @@ class EmailController extends Mailable
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct()
     {
-        $this->user = $user;
+        
     }
 
     /**

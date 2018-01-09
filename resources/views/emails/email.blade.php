@@ -1,5 +1,5 @@
 @component('mail::message')
-Dear {{ $user->name }},
+Dear user,
 
 Intruder DETECTED!
  

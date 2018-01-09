@@ -67,9 +67,11 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     Route::get('/alarms/add', [ 'uses' => 'DevicesController@addAlarms'])->name('alarms.add');
 
-    Route::get('/alarms/{id}/delete', [ 'uses' => 'DevicesController@deleteAlarm'])->name('alarms.delete');
+    Route::delete('/alarms/{id}/delete', [ 'uses' => 'DevicesController@deleteAlarm'])->name('alarms.delete');
 
     Route::get('/alarms/{id}/edit', [ 'uses' => 'DevicesController@editAlarm'])->name('alarms.edit');
+
+    Route::post('/alarms/store', [ 'uses' => 'DevicesController@alarmStore']);
 
     Route::post('/devices/store', [ 'uses' => 'DevicesController@store']);
 

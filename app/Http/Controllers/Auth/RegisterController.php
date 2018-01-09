@@ -56,11 +56,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $data['captcha'] = $this->captchaCheck();
+        /*$data['captcha'] = $this->captchaCheck();
         $data['captcha'] = true;
         if (!config('settings.reCaptchStatus')) {
             $data['captcha'] = true;
-        }
+        }*/
 
         return Validator::make($data,
             [
@@ -70,8 +70,8 @@ class RegisterController extends Controller
                 'email'                 => 'required|email|max:255|unique:users',
                 'password'              => 'required|min:6|max:20|confirmed',
                 'password_confirmation' => 'required|same:password',
-                'g-recaptcha-response'  => '',
-                'captcha'               => 'required|min:1',
+                //'g-recaptcha-response'  => '',
+                //'captcha'               => 'required|min:1',
             ],
             [
                 'name.unique'                   => trans('auth.userNameTaken'),
@@ -83,8 +83,8 @@ class RegisterController extends Controller
                 'password.required'             => trans('auth.passwordRequired'),
                 'password.min'                  => trans('auth.PasswordMin'),
                 'password.max'                  => trans('auth.PasswordMax'),
-                'g-recaptcha-response.required' => trans('auth.captchaRequire'),
-                'captcha.min'                   => trans('auth.CaptchaWrong'),
+                //'g-recaptcha-response.required' => trans('auth.captchaRequire'),
+                //'captcha.min'                   => trans('auth.CaptchaWrong'),
             ]
         );
     }

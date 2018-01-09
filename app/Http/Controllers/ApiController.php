@@ -11,7 +11,10 @@ use Illuminate\Http\UploadedFile;
 use App\Models\User;
 use App\Models\Device;
 use App\Models\Motion;
+use App\Models\Alarms;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailController;
 use Auth;
 use File;
 use Image;
@@ -109,9 +112,33 @@ class ApiController extends Controller
             }
                
         }
+
+        $this->emailNotificator($add);
         return $this->prepareResult(true, $add, $error['errors'],"Motion added");
     }
     
+    /**
+     * Email Notificator
+     */
+    public function emailNotificator($motion){
+        $device = Device::where('id','=',$motion->device_id)->get();
+        $user = User::where('id','=',$device[0]->owner_id)->get();
+        $email = $user[0]->email;
+        $motion = Motion::where('id','=',$motion->id)->get();
+
+        $alarms = Alarms::where('device_id','=',$motion[0]->device_id)->get();
+        if (count($alarms) > 0) {
+            foreach ($alarms as $a) {
+                if ($a->type == 0) {
+                    //Se dentro do intervalo
+                } else if ($a->type == 1) {
+                    $this->sendMail($email);
+                } else if ($a->type == 2) {
+                    // nao faz nada
+                } 
+            }
+        }
+    }
 
     /**
      * Stream updater
@@ -245,5 +272,11 @@ class ApiController extends Controller
             return $this->prepareResult(false, [], ["email" => "Unable to find user"],"User not found");
         }
         
+    }
+
+    public function sendMail($email){
+        Mail::to($email)->send(new EmailController());
+
+        return redirect()->back();
     }
 }

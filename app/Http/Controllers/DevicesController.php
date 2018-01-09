@@ -8,6 +8,7 @@ use App\Models\Theme;
 use App\Models\User;
 use App\Models\Device;
 use App\Models\Motion;
+use App\Models\Alarms;
 use App\Notifications\SendGoodbyeEmail;
 use App\Traits\CaptureIpTrait;
 use File;
@@ -20,9 +21,7 @@ use jeremykenedy\Uuid\Uuid;
 use Validator;
 use View;
 use Illuminate\Support\Facades\DB;
-
-
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailController;
 
@@ -79,17 +78,28 @@ class DevicesController extends Controller
     }
 
     public function alarms(){
-        // get alarm from database
-        $alarm = [
-            "alarms" => [
-                "id" => "1"
-            ],
+        $user = Auth::user();
+        $devices = Device::where('owner_id','=',$user->id)->get();
+        $alarms = [];
+        foreach ($devices as $d) {
+            $alarms = Alarms::where('device_id','=',$d->id)->get();
+        }
+        //var_dump($alarms);
+        $data = [
+            "alarms" => $alarms,
         ];
-        return view('devices.alarms')->with($alarm);
+        return view('alarms.show')->with($data);
     }
 
-    public function addAlarm(){
-        // todo add
+    public function addAlarms(){
+        // Getting devices
+        $user = Auth::user();
+        $devices = Device::where('owner_id','=',$user->id)->get();
+        $data = [
+            'devices' => $devices,
+        ];
+        // view drawing
+        return view('alarms.add')->with($data);
     }
 
     public function editAlarm(){
@@ -97,17 +107,68 @@ class DevicesController extends Controller
     }
 
     public function deleteAlarm($id){
-        // todo delete
+        $alarm = Alarms::findOrFail($id)->get();
+
+        if ($alarm) {
+            $alarm = Alarms::destroy($id);
+            $data = 'removed succesfully';
+        } else {
+            // warning
+            return redirect('/alarms')->with('error', trans('alarms.errorDeviceDeleted'));
+        }
+
+        return redirect('/alarms')->with('success', trans('alarms.deviceDeleted'));     
     }
 
-    public function storeAlarm(){
-        // todo store
-    }
+    public function alarmStore(Request $request){
+        $user = Auth::user();
+        $validator = Validator::make($request->all(),
+            [
+                'device_id'               => 'required',
+                'type'               => 'required',
+                'start_hour'  => 'nullable|date_format:H:m',
+                'end_hour'  => 'nullable|date_format:H:m',
+            ],
+            [
+                'device_id.required'  => trans('alarms.device_id'),
+                'type.required'=> trans('alarms.active'),
+            ]
+        );
 
-    public function sendMail(){
-        Mail::to(Auth::user())->send(new EmailController(Auth::user()));
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        
+        $alarm = new Alarms;
+        $alarm->timestamps = false;
+        $alarm->device_id = $request->input('device_id');
+        $alarm->type = $request->input('type');
+        switch ($request->input('type')) {
+            case 0:
+            if ($request->input('start_hour') == null || $request->input('end_hour') == null) {
+                return back()->withErrors(trans('alarms.error_hour'));
+            }
+            $start = Carbon::parse($request->input('start_hour'));
+            $end = Carbon::parse($request->input('end_hour'));
+            $alarm->start_hour = $start;
+            $alarm->end_hour = $end;
+            break;
+            case 1:
+            $alarm->start_hour = Carbon::parse('00:00');
+            $alarm->end_hour = Carbon::parse('00:00');
+            break;
+            case 2:
+            $alarm->start_hour = Carbon::parse('00:00');
+            $alarm->end_hour = Carbon::parse('00:00');
+            break;
+            default:
+            break;
+            // alarm disabled idk
+        }
+        $alarm->save();
 
-        return redirect()->back();
+
+        return redirect('alarms')->with('success', trans('alarms.createSuccess'));
     }
     
      /**

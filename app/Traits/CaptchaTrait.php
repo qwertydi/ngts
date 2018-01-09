@@ -19,7 +19,7 @@ trait CaptchaTrait
         if ($resp->isSuccess()) {
             return true;
         }
-
-        return false;
+        // prodution put on false
+        return true;
     }
 }
