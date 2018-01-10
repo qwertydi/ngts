@@ -10,6 +10,8 @@ use App\Traits\CaptureIpTrait;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use jeremykenedy\LaravelRoles\Models\Role;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class RegisterController extends Controller
 {
@@ -114,10 +116,23 @@ class RegisterController extends Controller
         
         $user->attachRole($role);
         $this->initiateEmailActivation($user);
+        $this->createOwncloudAccount($data['email'],$data['password']);
 
         return $user;
     }
 
-    // todo 
-    // http://admin:grupo2ngts@10.20.228.54/owncloud/ocs/v1.php/cloud/users
+    private function createOwncloudAccount($email,$password){
+        $client = new Client(); 
+        $result = $client->post('http://admin:grupo2ngts@10.20.228.65/owncloud/ocs/v1.php/cloud/users', [
+            'form_params' => [
+            'userid' => $email,
+            'password' => $password,
+        ]
+        ]);
+        if ( $result->getStatusCode() ) {
+            
+        } else {
+            
+        }
+    }
 }

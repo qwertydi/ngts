@@ -102,8 +102,21 @@ class DevicesController extends Controller
         return view('alarms.add')->with($data);
     }
 
-    public function editAlarm(){
-        // todo edit
+    public function editAlarm($id){
+        $user = Auth::user();
+        $devices = Device::where('owner_id','=',$user->id)->get();
+        $alarm = Alarms::findOrFail($id);
+
+        $data = [
+            'alarm'        => $alarm,
+            'devices' => $devices,
+        ];
+
+        return view('alarms.edit')->with($data);
+    }
+
+    public function updateUserAccount(Request $request, $id) {
+        // alarms.edit
     }
 
     public function deleteAlarm($id){

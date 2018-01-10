@@ -71,8 +71,10 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     Route::get('/alarms/{id}/edit', [ 'uses' => 'DevicesController@editAlarm'])->name('alarms.edit');
 
-    Route::post('/alarms/store', [ 'uses' => 'DevicesController@alarmStore']);
+    Route::put('/alarms/{id}/updateAlarm', ['uses' => 'DevicesController@updateUserAccount'])->name('alarms.update');
 
+    Route::post('/alarms/store', [ 'uses' => 'DevicesController@alarmStore']);
+    
     Route::post('/devices/store', [ 'uses' => 'DevicesController@store']);
 
     Route::post('/email', [ 'uses' => 'DevicesController@sendMail'])->name('email');

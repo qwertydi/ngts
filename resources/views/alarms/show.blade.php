@@ -64,18 +64,20 @@
 										</td>
 										<td>
 										@if($a->type == 0 )
-										<span class="label label-info">{{$a->start_hour}}</span>
-										<span class="label label-info">{{$a->end_hour}}</span>
+										<span class="label label-info">{{ Carbon\Carbon::parse($a->start_hour)->format('H:m') }}</span>
+										<span class="label label-info">{{ Carbon\Carbon::parse($a->end_hour)->format('H:m') }}</span>
 										@else
 											<span class="label label-warning">Not Defined</span>
 										@endif
 										</td>
 										<td>
-											<a href="/alarm/edit" class="btn btn-sm btn-default">Edit Alarm</a>
+                                            <a class="btn btn-sm btn-info btn-block" href="{{ URL::to('alarms/' . $a->id . '/edit') }}" data-toggle="tooltip" title="Edit">
+                                                <i class="fa fa-pencil fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Edit</span><span class="hidden-xs hidden-sm hidden-md"> Alarm</span>
+                                            </a>
 										</td>
 										<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['alarms.delete', $a->id],'style'=>'display:inline']) !!}
-												{!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger']) !!}
+												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> User</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Device', 'data-message' => 'Are you sure you want to delete this Device ?')) !!}
 											{!! Form::close() !!}
 										</td>
 									</tr>
@@ -93,5 +95,17 @@
 			</div>
 		</div>
 	</div>
-@endsection
+	@include('modals.modal-delete')
 
+@endsection
+	
+@section('footer_scripts')
+	
+	@include('scripts.delete-modal-script')
+	@include('scripts.save-modal-script')
+	{{--
+		@include('scripts.tooltips')
+	--}}
+@endsection
+	
+	

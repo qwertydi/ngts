@@ -45,10 +45,10 @@
 									@foreach ($motion as $m)
 										<tr>
 											<td>{{$m->device_id}}</td>
-											<td>{{$m->date}}</td>
+											<td>{{ Carbon\Carbon::parse($m->date)->format('d-m-Y H:m') }}</td>
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.motion', $m->device_id,$m->id],'style'=>'display:inline']) !!}
-												{!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger']) !!}
+												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> User</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Motion', 'data-message' => 'Are you sure you want to delete this Motion history ?')) !!}
 											{!! Form::close() !!}
 											</td>
 										</tr>
@@ -64,13 +64,15 @@
       </div>
     </div>
   </div>
-
-  @include('modals.modal-delete')
+	@include('modals.modal-delete')
 
 @endsection
 
 @section('footer_scripts')
 
-  @include('scripts.delete-modal-script')
-
+    @include('scripts.delete-modal-script')
+    @include('scripts.save-modal-script')
+    {{--
+        @include('scripts.tooltips')
+    --}}
 @endsection

@@ -18,6 +18,7 @@ use App\Mail\EmailController;
 use Auth;
 use File;
 use Image;
+Use Carbon\Carbon;
 
 class ApiController extends Controller
 {
@@ -133,11 +134,16 @@ class ApiController extends Controller
         if (count($alarms) > 0) {
             foreach ($alarms as $a) {
                 if ($a->type == 0) {
-                    //Se dentro do intervalo
+                    $now = Carbon::now()->format('H:m');
+                    $start = Carbon::parse($a->start_hour)->format('H:m');
+                    $end = Carbon::parse($a->end_hour)->format('H:m');
+                    if($now >= $start && $now <= $end){
+                        $this->sendMail($alarms[0]->device_id,$motion[0]->date);
+                    }
                 } else if ($a->type == 1) {
-                    $this->sendMail($email);
+                    $this->sendMail($alarms[0]->device_id,$motion[0]->date);
                 } else if ($a->type == 2) {
-                    // nao faz nada
+                    // doesnt do anything.. just log on motion
                 } 
             }
         }
@@ -274,8 +280,8 @@ class ApiController extends Controller
         
     }
 
-    public function sendMail($email){
-        Mail::to($email)->send(new EmailController());
+    public function sendMail($alarm_id,$date){
+        Mail::to(Auth::user()->email)->send(new EmailController(Auth::user(),$alarm_id,$date));
 
         return redirect()->back();
     }
