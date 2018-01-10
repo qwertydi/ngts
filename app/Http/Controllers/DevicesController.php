@@ -264,8 +264,6 @@ class DevicesController extends Controller
         $device->active = $request->input('active');
         $device->save();
 
-        var_dump($device->active);
-
         return redirect('devices')->with('success', trans('devices.createSuccess'));
     }
 
@@ -282,6 +280,17 @@ class DevicesController extends Controller
         // get device 
         // delete device
         // redirect 
+        $motion = Motion::findOrFail($m_id)->get();
+
+        if ($motion) {
+            $motion = Motion::destroy($m_id);
+            $data = 'removed succesfully';
+        } else {
+            // warning
+            return redirect('/devices/'.$id.'')->with('error', trans('motion.errorMotionDeleted'));
+        }
+
+        return redirect('/devices/'.$id.'')->with('success', trans('motion.motionDeleted'));     
     }
     
     /**

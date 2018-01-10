@@ -98,19 +98,22 @@ class ApiController extends Controller
         if ($error['error']) {
             return $this->prepareResult(false, [], $error['errors'],"Error on adding motion");
         } else {
-            // check if parent exist!
-            if(Device::findOrFail($request->device_id)){
-                $add = new Motion();
-                $add->device_id = $request->device_id;
-                $add->timestamps = false;
-                $add->date =  date('Y-m-d H:i:s');
-                $add->stream = $request->stream;
-                $add->picture = $request->picture;
-                $add->save();
+            // check if device exists
+            $device = Device::where('mac_address','=',$request->mac_address)->where('owner_id','=',Auth::user()->id)->first();
+            if ($device != null) {
+                if(Device::findOrFail($device->id)){
+                        $add = new Motion();
+                        $add->device_id = $device->id;
+                        $add->mac_address = $request->mac_address;
+                        $add->timestamps = false;
+                        $add->date =  date('Y-m-d H:i:s');
+                        $add->save();    
+                } else {
+                    return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
+                }
             } else {
-                return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
+                return response()->json(['error'=>'Device with mac address ' . $request->mac_address . ' doesn\'t exist for user with id '. Auth::user()->id .''], 401);
             }
-               
         }
 
         $this->emailNotificator($add);
@@ -177,11 +180,9 @@ class ApiController extends Controller
             }
         }elseif($type == "add motion"){
             $validator = Validator::make($request->all(),[
-                'device_id' => 'filled',
+                'mac_address' => 'filled',
                 'date' => 'filled',
                 'hour' => 'filled',
-                'stream' => 'filled',
-                'picture' => 'filled'
             ]);
             if($validator->fails()){
                 $error = true;
@@ -189,7 +190,6 @@ class ApiController extends Controller
             }
         }elseif($type == "create device"){
             $validator = Validator::make($request->all(),[
-                //'owner_id' => 'required',
                 'name' => 'required',
                 'ip_address' => 'required',
                 'active' => 'required',

@@ -38,8 +38,6 @@
 								<tr class="success">
 									<th>Device ID</th>
 									<th>Date</th>
-									<th>Video Stream</th>
-									<th>Picture</th>
 									<th>Delete Motion Info</th>
 									</tr>
 								</thead>
@@ -48,8 +46,6 @@
 										<tr>
 											<td>{{$m->device_id}}</td>
 											<td>{{$m->date}}</td>
-											<td>{{$m->stream}}</td>
-											<td>{{$m->picture}}</td>
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.motion', $m->device_id,$m->id],'style'=>'display:inline']) !!}
 												{!! Form::submit('Delete', ['class' => 'btn btn-sm btn-danger']) !!}

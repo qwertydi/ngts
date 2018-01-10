@@ -111,10 +111,13 @@ class RegisterController extends Controller
                 'signup_ip_address' => $ipAddress->getClientIp(),
                 'activated'         => true,
             ]);
-
+        
         $user->attachRole($role);
         $this->initiateEmailActivation($user);
 
         return $user;
     }
+
+    // todo 
+    // http://admin:grupo2ngts@10.20.228.54/owncloud/ocs/v1.php/cloud/users
 }
