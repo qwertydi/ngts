@@ -139,8 +139,8 @@ class DevicesController extends Controller
             [
                 'device_id'               => 'required',
                 'type'               => 'required',
-                'start_hour'  => 'nullable|date_format:H:m',
-                'end_hour'  => 'nullable|date_format:H:m',
+                'start_hour'  => 'date_format:H:m|nullable',
+                'end_hour'  => 'date_format:H:m|nullable',
             ],
             [
                 'device_id.required'  => trans('alarms.device_id'),
@@ -253,7 +253,7 @@ class DevicesController extends Controller
                 'name'                  => 'required|max:255|',
                 'ip_address'                 => 'required|max:255',
                 'mac_address'               => 'required|max:255',
-                'active'               => 'required|max:2',
+                'active'               => 'required|max:1',
             ],
             [
                 'name'         => trans('devices.name'),

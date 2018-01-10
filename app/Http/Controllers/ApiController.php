@@ -78,15 +78,18 @@ class ApiController extends Controller
         if ($error['error']) {
             return $this->prepareResult(false, [], $error['errors'],"Error in deleting device");
         } else {
-            $exists = DB::table('devices')->where('mac_address', $request->mac_address)->select();
-            // TODO
-            var_dump($exist);
-	        /*if($exists) {
-                $device = DB::table('devices')->where('mac_address', $request->mac_address)->delete();
-                return response()->json(['error'=>'Device deleted']);
+            $exists = Device::where('mac_address', $request->mac_address)->first();
+            
+	        if($exists != null) {
+                if ($exists->owner_id == Auth::user()->id) {
+                    $device = Device::destroy($exists->id);
+                    return response()->json(['success'=>'Device deleted']);
+                } else {
+                    return response()->json(['error'=>'You are unauthorised to delete this device'], 401);
+                }
             } else {
                 return response()->json(['error'=>'Device doenst\'t exists']);
-            }*/
+            }
         }
     }
 
@@ -106,6 +109,7 @@ class ApiController extends Controller
                         $add = new Motion();
                         $add->device_id = $device->id;
                         $add->mac_address = $request->mac_address;
+                        $add->url = $request->url;
                         $add->timestamps = false;
                         $add->date =  date('Y-m-d H:i:s');
                         $add->save();    
@@ -187,8 +191,8 @@ class ApiController extends Controller
         }elseif($type == "add motion"){
             $validator = Validator::make($request->all(),[
                 'mac_address' => 'filled',
-                'date' => 'filled',
-                'hour' => 'filled',
+                'url' => 'filled',
+                //'hour' => 'filled',
             ]);
             if($validator->fails()){
                 $error = true;
