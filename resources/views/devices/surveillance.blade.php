@@ -36,17 +36,21 @@
 						<div class="table-responsive">
 							<table class="table table-striped table-condensed data-table">
 								<thead>
-									<tr class="success">
-										<th>Stream</th>
+									<tr>
+										<th>Live video stream</th>
 									</tr>
 								</thead>
 								<tbody>
                                     <td>
                                     <div class="media">
-                                        <div class="media-body">
-                                            <iframe width="640" height="480" src="{{$stream}}" frameborder="0" allowfullscreen>
+										<div class="col col-lg-2">
+										</div>
+                                        <div class="col col-lg-10">
+                                            <iframe width="640" height="480" src="{{$stream}}" frameborder="1" allowfullscreen>
                                             </iframe>
                                         </div>
+										<div class="col col-lg-2">
+									</div>
                                     </div>
                                     </td>
 								</tbody>

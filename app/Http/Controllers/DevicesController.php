@@ -202,7 +202,7 @@ class DevicesController extends Controller
         $device = Device::where('id',$id)->get();
 
         $ip = $device[0]->ip_address;
-        $stream = "http://" . $ip  . "/stream";
+        $stream = "http://" . $ip  . ":5000/stream";
         $capture = $ip  . "/capture";
 
         $data = [

@@ -44,7 +44,8 @@ class ApiController extends Controller
         if ($error['error']) {
             return $this->prepareResult(false, [], $error['errors'],"Error in adding device");
         } else {
-            $device = Device::where('mac_address', '=', $request->mac_address)->get();
+            $device = Device::where('mac_address', '=', $request->mac_address)->where('owner_id','=',Auth::user()->id)->get();
+
             $add = true;
             foreach($device as $d){
                 if($d->mac_address == $request->mac_address){

@@ -45,12 +45,12 @@
 								<tbody>
 									@foreach ($motion as $m)
 										<tr>
-											<td>{{$m->device_id}}</td>
+											<td><a href="/devices/{{$m->device_id}}"</a>{{$m->device_id}}</td>
 											<td>{{ Carbon\Carbon::parse($m->date)->format('d-m-Y H:m') }}</td>
-											<td><a href="{{$m->url}">Video link</a>{{$m->url}</td>
+											<td><a href="{{$m->url}}/download">Download link</a></td>
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.motion', $m->device_id,$m->id],'style'=>'display:inline']) !!}
-												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> Device</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Motion', 'data-message' => 'Are you sure you want to delete this Motion history ?')) !!}
+												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> Motion</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Motion', 'data-message' => 'Are you sure you want to delete this Motion history ?')) !!}
 											{!! Form::close() !!}
 											</td>
 										</tr>
