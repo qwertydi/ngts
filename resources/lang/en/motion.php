@@ -15,4 +15,6 @@ return [
     // Delete
     'errorMotionDeleted' => 'Error deleting motion history!',
     'motionDeleted' =>  'Motion deleted with success!',
+    'pictureSuccess' => 'Picture captured with success!',
+    'pictureError' => 'Error capturing picture!',
 ];

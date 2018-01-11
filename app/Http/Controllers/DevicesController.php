@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Device;
 use App\Models\Motion;
 use App\Models\Alarms;
+use App\Models\Picture;
 use App\Notifications\SendGoodbyeEmail;
 use App\Traits\CaptureIpTrait;
 use File;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailController;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
+
 
 class DevicesController extends Controller
 {
@@ -203,7 +207,7 @@ class DevicesController extends Controller
 
         $ip = $device[0]->ip_address;
         $stream = "http://" . $ip  . ":5000/stream";
-        $capture = $ip  . "/capture";
+        $capture = "http://" . $ip  . "/capture";
 
         $data = [
             'stream' => $stream,
@@ -214,6 +218,32 @@ class DevicesController extends Controller
 
         return view('devices.surveillance')->with($data);
     }
+
+    public function pictureButton($id){
+        $user = Auth::user();
+        $device = Device::findOrFail($id)->get();
+
+        if(Device::findOrFail($id)->owner_id != $user->id){
+            return response()->view('errors.403');
+        }
+
+        $device = Device::where('id',$id)->get();
+
+        $ip = $device[0]->ip_address;
+        $stream = "http://" . $ip  . ":5000/stream";
+        $capture = "http://" . $ip  . "/capture";
+
+        $data = [
+            'stream' => $stream,
+            'capture' => $capture,
+            'id' => $id,
+        ];
+        
+
+        return view('devices.surveillance')->with($data);
+    }
+
+    
 
     /**
      * Display the specified resource.

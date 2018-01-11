@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Device;
 use App\Models\Motion;
 use App\Models\Alarms;
+use App\Models\Picture;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailController;

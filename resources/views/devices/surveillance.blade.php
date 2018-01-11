@@ -31,6 +31,11 @@
 								<i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
 							Back  <span class="hidden-xs">to Device {{$id}}</span>
 						</a>
+
+						<a href="{{$capture}}" class="btn btn-warning btn-xs pull-right" style="margin-left: 1em;">
+								<i class="fa fa-fw fa-camera" aria-hidden="true"></i>
+							Capture  <span class="hidden-xs">image on device {{$id}}</span>
+						</a>
 					</div>
 					<div class="panel-body">
 						<div class="table-responsive">
