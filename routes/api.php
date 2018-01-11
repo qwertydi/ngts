@@ -24,5 +24,6 @@ $api->version('v1', function ($api) {
         $api->post('/devices/add','App\Http\Controllers\ApiController@addDeviceFromPost');
         $api->post('/devices/delete','App\Http\Controllers\ApiController@deleteDeviceFromMAC');
         $api->post('/motion/add','App\Http\Controllers\ApiController@addMotionFromPost');
+        $api->post('/picture/add','App\Http\Controllers\ApiController@addPictureFromPost');
     });
 });

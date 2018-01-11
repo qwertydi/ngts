@@ -112,7 +112,7 @@ class ApiController extends Controller
                         $add->mac_address = $request->mac_address;
                         $add->url = $request->url;
                         $add->timestamps = false;
-                        $add->date =  date('Y-m-d H:i:s');
+                        $add->date =  Carbon::now()->format('Y-m-d H:m');
                         $add->save();    
                 } else {
                     return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
@@ -157,8 +157,32 @@ class ApiController extends Controller
     /**
      * Stream updater
      */
-    public function stream(Request $request) {
-        // TODO
+    public function addPictureFromPost(Request $request) {
+        $error = $this->validations($request,"add picture");
+        if ($error['error']) {
+            return $this->prepareResult(false, [], $error['errors'],"Error on adding a picture");
+        } else {
+            // check if device exists
+            $device = Device::where('mac_address','=',$request->mac_address)->where('owner_id','=',Auth::user()->id)->first();
+            if ($device != null) {
+                if(Device::findOrFail($device->id)){
+                        $add = new Picture();
+                        $add->device_id = $device->id;
+                        $add->mac_address = $request->mac_address;
+                        $add->url = $request->url;
+                        $add->timestamps = false;
+                        $add->date = Carbon::now()->format('Y-m-d H:m');
+                        $add->save();    
+                } else {
+                    return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
+                }
+            } else {
+                return response()->json(['error'=>'Device with mac address ' . $request->mac_address . ' doesn\'t exist for user with id '. Auth::user()->id .''], 401);
+            }
+        }
+
+        //$this->emailNotificator($add);
+        return $this->prepareResult(true, $add, $error['errors'],"Motion added");
     }
     
 
@@ -190,6 +214,16 @@ class ApiController extends Controller
                 $errors = $validator->errors();
             }
         }elseif($type == "add motion"){
+            $validator = Validator::make($request->all(),[
+                'mac_address' => 'filled',
+                'url' => 'filled',
+                //'hour' => 'filled',
+            ]);
+            if($validator->fails()){
+                $error = true;
+                $errors = $validator->errors();
+            }
+        }elseif($type == "add picture"){
             $validator = Validator::make($request->all(),[
                 'mac_address' => 'filled',
                 'url' => 'filled',
