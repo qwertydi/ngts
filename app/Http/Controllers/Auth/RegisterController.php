@@ -123,7 +123,9 @@ class RegisterController extends Controller
 
     private function createOwncloudAccount($email,$password){
         $client = new Client(); 
-        $result = $client->post('http://admin:grupo2ngts@10.20.228.65/owncloud/ocs/v1.php/cloud/users', [
+        // Desenvolvimento: $result = $client->post('http://admin:grupo2ngts@10.20.228.65/owncloud/ocs/v1.php/cloud/users', [
+        // Produção:
+        $result = $client->post('http://admin:grupo2ngts@localhost/owncloud/ocs/v1.php/cloud/users', [
             'form_params' => [
             'userid' => $email,
             'password' => $password,
