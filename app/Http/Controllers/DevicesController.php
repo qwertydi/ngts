@@ -239,6 +239,14 @@ class DevicesController extends Controller
             'id' => $id,
         ];
         
+        $client = new Client(); 
+        // Desenvolvimento: 
+        $result = $client->get($capture);
+        if ( $result->getStatusCode() == 200) {
+            $data = "'success', trans('motion.pictureSuccess')";
+        } else {
+            $data = "'error', trans('motion.pictureError')";
+        }
 
         return view('devices.surveillance')->with($data);
     }

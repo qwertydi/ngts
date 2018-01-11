@@ -63,6 +63,8 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     Route::get('/devices/{id}/surveillance', [ 'uses' => 'DevicesController@surveillance'])->name('surveillance');
 
+    Route::get('/devices/{id}/surveillance/picture', [ 'uses' => 'DevicesController@pictureButton'])->name('surveillance.picture');
+
     Route::get('/alarms', [ 'uses' => 'DevicesController@alarms'])->name('alarms');
 
     Route::get('/alarms/add', [ 'uses' => 'DevicesController@addAlarms'])->name('alarms.add');
