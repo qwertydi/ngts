@@ -143,10 +143,10 @@ class ApiController extends Controller
                     $start = Carbon::parse($a->start_hour)->format('H:m');
                     $end = Carbon::parse($a->end_hour)->format('H:m');
                     if($now >= $start && $now <= $end){
-                        $this->sendMail($alarms[0]->device_id,$motion[0]->date);
+                        $this->sendMail($device[0],$motion[0]->date,$motion[0]);
                     }
                 } else if ($a->type == 1) {
-                    $this->sendMail($alarms[0]->device_id,$motion[0]->date);
+                    $this->sendMail($device[0],$motion[0]->date,$motion[0]);
                 } else if ($a->type == 2) {
                     // doesnt do anything.. just log on motion
                 } 
@@ -285,8 +285,8 @@ class ApiController extends Controller
         
     }
 
-    public function sendMail($alarm_id,$date){
-        Mail::to(Auth::user()->email)->send(new EmailController(Auth::user(),$alarm_id,$date));
+    public function sendMail($device,$date,$motion){
+        Mail::to(Auth::user()->email)->send(new EmailController(Auth::user(),$device,$date,$motion));
 
         return redirect()->back();
     }

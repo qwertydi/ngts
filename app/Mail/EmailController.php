@@ -14,18 +14,20 @@ class EmailController extends Mailable
 
 
     public $user;
-    public $alarm_id;
+    public $device;
     public $date;
+    public $motion;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user,$alarm_id,$date)
+    public function __construct($user,$device,$date,$motion)
     {
         $this->user = $user;
-        $this->alarm_id = $alarm_id;
+        $this->device = $device;
         $this->date = $date;
+        $this->motion = $motion;
     }
 
     /**
