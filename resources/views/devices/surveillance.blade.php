@@ -32,7 +32,7 @@
 							Back  <span class="hidden-xs">to Device {{$id}}</span>
 						</a>
 
-						<a href="{{ URL::to('devices/' . $id . '/surveillance/picture') }}" class="btn btn-warning btn-xs pull-right" style="margin-left: 1em;">
+						<a href="/devices/{{$id}}/surveillance/picture" class="btn btn-warning btn-xs pull-right" style="margin-left: 1em;">
 								<i class="fa fa-fw fa-camera" aria-hidden="true"></i>
 							Capture  <span class="hidden-xs">image on device {{$id}}</span>
 						</a>

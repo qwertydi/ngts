@@ -64,8 +64,8 @@
 										</td>
 										<td>
 										@if($a->type == 0 )
-										<span class="label label-info">{{ Carbon\Carbon::parse($a->start_hour)->format('H:m') }}</span>
-										<span class="label label-info">{{ Carbon\Carbon::parse($a->end_hour)->format('H:m') }}</span>
+										<span class="label label-info">{{ Carbon\Carbon::parse($a->start_hour)->format('H:i') }}</span>
+										<span class="label label-info">{{ Carbon\Carbon::parse($a->end_hour)->format('H:i') }}</span>
 										@else
 											<span class="label label-warning">Not Defined</span>
 										@endif

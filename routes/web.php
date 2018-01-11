@@ -65,6 +65,10 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     Route::get('/devices/{id}/surveillance/picture', [ 'uses' => 'DevicesController@pictureButton'])->name('surveillance.picture');
 
+    Route::get('/devices/{id}/pictures/picture', [ 'uses' => 'DevicesController@pictureButton2']);
+
+    Route::get('/devices/{id}/pictures', [ 'uses' => 'DevicesController@showPictures'])->name('pictures.show');
+
     Route::get('/alarms', [ 'uses' => 'DevicesController@alarms'])->name('alarms');
 
     Route::get('/alarms/add', [ 'uses' => 'DevicesController@addAlarms'])->name('alarms.add');
@@ -84,6 +88,8 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
     Route::delete('/devices/deleteDevice/{id}', [ 'uses' => 'DevicesController@deleteDevice'])->name('delete.device');
 
     Route::delete('/devices/{id}/deleteHistory/{m_id}', [ 'uses' => 'DevicesController@motionDeleteHistory'])->name('delete.motion');
+
+    Route::delete('/devices/{id}/deletePictureHistory/{m_id}', [ 'uses' => 'DevicesController@motionPictureHistory'])->name('delete.pictureHistory');
 
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [

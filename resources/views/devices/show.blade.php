@@ -35,8 +35,9 @@
 										<th>MAC Address</th>
 										<th>Status</th>
 										<th>Surveillance</th>
+										<th>Pictures</th>
 										<th>Motion Log</th>
-										<th>Device Settings</th>
+										<!--<th>Device Settings</th>-->
 										<th>Delete Device</th>
 									</tr>
 								</thead>
@@ -59,12 +60,15 @@
 											<a class="btn btn-sm btn-default " href="{{ URL::to('devices/' . $device->id . '/surveillance') }}" data-toggle="tooltip" title="Show"><span>Surveillance</span></a>
 											</td>
 											<td>
-												<a class="btn btn-sm btn-success " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Motion History</span></a>
+											<a class="btn btn-sm btn-default " href="{{ URL::to('devices/' . $device->id . '/pictures') }}" data-toggle="tooltip" title="Show"><span>Pictures</span></a>
 											</td>
 											<td>
-											<a class="btn btn-sm btn-info " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Settings</span></a>
-											
+												<a class="btn btn-sm btn-success " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Motion History</span></a>
 											</td>
+											<!--<td>
+											<a class="btn btn-sm btn-warning " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Settings</span></a>
+											
+											</td>-->
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.device', $device->id],'style'=>'display:inline']) !!}
 												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> User</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Device', 'data-message' => 'Are you sure you want to delete this Device ?')) !!}

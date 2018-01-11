@@ -19,7 +19,7 @@ class CreatePictureTable extends Migration
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
             $table->char('mac_address', 100);
             $table->char('url', 100);
-            $table->dateTime('date');
+            $table->char('date',20);
         });
     }
 

@@ -143,8 +143,8 @@ class DevicesController extends Controller
             [
                 'device_id'               => 'required',
                 'type'               => 'required',
-                'start_hour'  => 'date_format:H:m|nullable',
-                'end_hour'  => 'date_format:H:m|nullable',
+                'start_hour'  => 'date_format:H:i|nullable',
+                'end_hour'  => 'date_format:H:i|nullable',
             ],
             [
                 'device_id.required'  => trans('alarms.device_id'),
@@ -232,25 +232,79 @@ class DevicesController extends Controller
         $ip = $device[0]->ip_address;
         $stream = "http://" . $ip  . ":5000/stream";
         $capture = "http://" . $ip  . ":5000/capture";
+        
+        $client = new Client();  
+        $msg;
+        $result = $client->get($capture);
+        
+        if ( $result->getStatusCode() == 200) {
+            $msg = 'success';
+            $msg2 = trans('motion.pictureSuccess');           
+         } else {
+            $msg ='error';
+            $msg2 = trans('motion.pictureError');
+        }
 
         $data = [
             'stream' => $stream,
             'capture' => $capture,
             'id' => $id,
+            $msg => $msg2,
         ];
-        
-        $client = new Client(); 
-        // Desenvolvimento: 
-        $result = $client->get($capture);
-        if ( $result->getStatusCode() == 200) {
-            $data = "'success', trans('motion.pictureSuccess')";
-        } else {
-            $data = "'error', trans('motion.pictureError')";
-        }
 
-        return view('devices.surveillance')->with($data);
+        return redirect('devices/'.$id.'/surveillance')->with($data);
     }
 
+    public function pictureButton2($id){
+        $user = Auth::user();
+        $device = Device::findOrFail($id)->get();
+
+        if(Device::findOrFail($id)->owner_id != $user->id){
+            return response()->view('errors.403');
+        }
+
+        $picture = Picture::where('device_id',$id)->get();
+    
+        $client = new Client();  
+        $ip = $device[0]->ip_address;
+        $capture = "http://" . $ip  . ":5000/capture";
+        $result = $client->get($capture);
+        
+        if ( $result->getStatusCode() == 200) {
+            $msg = 'success';
+            $msg2 = trans('motion.pictureSuccess');           
+         } else {
+            $msg ='error';
+            $msg2 = trans('motion.pictureError');
+        }
+
+        $data = [
+            'user' => $user,
+            'picture' => $picture,
+            'id' => $id,
+            $msg => $msg2,
+        ];
+
+        return redirect('devices/'.$id.'/pictures')->with($data);
+    }
+
+
+    public function showPictures($id){
+        $user = Auth::user();
+        if(Device::findOrFail($id)->get()){
+            if(Device::findOrFail($id)->owner_id != $user->id){
+            return response()->view('errors.403');
+            }
+            $picture = Picture::where('device_id',$id)->get();
+            $data = [
+                'user' => $user,
+                'picture' => $picture,
+                'id' => $id,
+            ];
+        }
+
+        return view('devices.picture')->with($data);
+    }
     
 
     /**
@@ -276,6 +330,21 @@ class DevicesController extends Controller
         }
 
         return view('devices.device')->with($data);
+    }
+
+    public function devicePictureHistory($p_id)
+    {
+        $picture = Picture::findOrFail($p_id)->get();
+
+        if ($picture) {
+            $picture = Motion::destroy($p_id);
+            $data = 'removed succesfully';
+        } else {
+            // warning
+            return redirect('/devices/'.$id.'/pictures')->with('error', trans('motion.errorMotionDeleted'));
+        }
+
+        return redirect('/devices/'.$id.'/pictures')->with('success', trans('motion.motionDeleted')); 
     }
 
     public function addDevice()

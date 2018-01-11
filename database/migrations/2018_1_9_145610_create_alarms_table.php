@@ -18,8 +18,8 @@ class CreateAlarmsTable extends Migration
             $table->integer('device_id')->unsigned()->index();
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
             $table->integer('type');
-            $table->dateTime('start_hour');
-            $table->dateTime('end_hour');
+            $table->char('start_hour',20);
+            $table->char('end_hour',20);
         });
     }
 

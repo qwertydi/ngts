@@ -26,6 +26,7 @@ class ApiController extends Controller
     public $successStatus = 200;
     
     public function login(){
+        //var_dump($_REQUEST);
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
@@ -108,13 +109,17 @@ class ApiController extends Controller
             $device = Device::where('mac_address','=',$request->mac_address)->where('owner_id','=',Auth::user()->id)->first();
             if ($device != null) {
                 if(Device::findOrFail($device->id)){
+                    if ($device->active == 1) {
                         $add = new Motion();
                         $add->device_id = $device->id;
                         $add->mac_address = $request->mac_address;
                         $add->url = $request->url;
                         $add->timestamps = false;
-                        $add->date =  Carbon::now()->format('Y-m-d H:m');
-                        $add->save();    
+                        $add->date =  Carbon::now()->format('Y-m-d H:i');
+                        $add->save();       
+                    } else {
+                        return response()->json(['error'=>'Device is not active!'], 401);
+                    }
                 } else {
                     return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
                 }
@@ -132,26 +137,30 @@ class ApiController extends Controller
      */
     public function emailNotificator($motion){
         $device = Device::where('id','=',$motion->device_id)->get();
-        $user = User::where('id','=',$device[0]->owner_id)->get();
-        $email = $user[0]->email;
-        $motion = Motion::where('id','=',$motion->id)->get();
+        if ( $device[0]->active == 1) {
+            $user = User::where('id','=',$device[0]->owner_id)->get();
+            $email = $user[0]->email;
+            $motion = Motion::where('id','=',$motion->id)->get();
 
-        $alarms = Alarms::where('device_id','=',$motion[0]->device_id)->get();
-        if (count($alarms) > 0) {
-            foreach ($alarms as $a) {
-                if ($a->type == 0) {
-                    $now = Carbon::now()->format('H:m');
-                    $start = Carbon::parse($a->start_hour)->format('H:m');
-                    $end = Carbon::parse($a->end_hour)->format('H:m');
-                    if($now >= $start && $now <= $end){
+            $alarms = Alarms::where('device_id','=',$motion[0]->device_id)->get();
+            if (count($alarms) > 0) {
+                foreach ($alarms as $a) {
+                    if ($a->type == 0) {
+                        $now = Carbon::now()->format('H:i');
+                        $start = Carbon::parse($a->start_hour)->format('H:i');
+                        $end = Carbon::parse($a->end_hour)->format('H:i');
+                        if($now >= $start && $now <= $end){
+                            $this->sendMail($device[0],$motion[0]->date,$motion[0]);
+                        }
+                    } else if ($a->type == 1) {
                         $this->sendMail($device[0],$motion[0]->date,$motion[0]);
-                    }
-                } else if ($a->type == 1) {
-                    $this->sendMail($device[0],$motion[0]->date,$motion[0]);
-                } else if ($a->type == 2) {
-                    // doesnt do anything.. just log on motion
-                } 
+                    } else if ($a->type == 2) {
+                        // doesnt do anything.. just log on motion
+                    } 
+                }
             }
+        } else {
+            // device not active
         }
     }
 
@@ -167,13 +176,18 @@ class ApiController extends Controller
             $device = Device::where('mac_address','=',$request->mac_address)->where('owner_id','=',Auth::user()->id)->first();
             if ($device != null) {
                 if(Device::findOrFail($device->id)){
+                    if ($device->active == 1) {
                         $add = new Picture();
                         $add->device_id = $device->id;
                         $add->mac_address = $request->mac_address;
                         $add->url = $request->url;
                         $add->timestamps = false;
-                        $add->date = Carbon::now()->format('Y-m-d H:m');
+                        
+                        $add->date = Carbon::now()->format('Y-m-d H:i');
                         $add->save();    
+                    } else {
+                        return response()->json(['error'=>'Device is not active!'], 401);
+                    }
                 } else {
                     return response()->json(['error'=>'Device ID doesn\'t exist!'], 401);
                 }
