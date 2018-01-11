@@ -231,7 +231,7 @@ class DevicesController extends Controller
 
         $ip = $device[0]->ip_address;
         $stream = "http://" . $ip  . ":5000/stream";
-        $capture = "http://" . $ip  . "/capture";
+        $capture = "http://" . $ip  . ":5000/capture";
 
         $data = [
             'stream' => $stream,
