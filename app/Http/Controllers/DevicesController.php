@@ -358,7 +358,7 @@ class DevicesController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'name'                  => 'required|max:255|',
-                'ip_address'                 => 'required|max:255',
+                'ip_address'                 => 'required|ip|max:255',
                 'mac_address'               => 'required|max:255',
                 'active'               => 'required|max:1',
             ],
@@ -375,6 +375,10 @@ class DevicesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        if (!$this->IsValid($request->input('mac_address'))) {
+            return  back()->withErrors("MAC Address not valid");
+        }
+
         $device = new Device;
         $device->timestamps = false;
         $device->name = $request->input('name');
@@ -386,6 +390,12 @@ class DevicesController extends Controller
 
         return redirect('devices')->with('success', trans('devices.createSuccess'));
     }
+
+    public static function IsValid($mac)
+    {
+        return (preg_match('/([a-fA-F0-9]{2}[:|\-]?){6}/', $mac) == 1);
+    }
+
 
     /**
      * Display the specified resource.

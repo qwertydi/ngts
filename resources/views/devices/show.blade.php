@@ -71,7 +71,7 @@
 											</td>-->
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.device', $device->id],'style'=>'display:inline']) !!}
-												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> User</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Device', 'data-message' => 'Are you sure you want to delete this Device ?')) !!}
+												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> device</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Device', 'data-message' => 'Are you sure you want to delete this Device ?')) !!}
 
 											{!! Form::close() !!}
 											</td>
