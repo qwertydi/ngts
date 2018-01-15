@@ -77,7 +77,7 @@
                     <div class="col-md-9">
                     <div class="input-group">
                         <select class="form-control" name="active" id="active">
-                        <option value="">Set type for alarm</option>
+                        <option value="">Set status of device</option>
                             <option value="1">Active</option>
                             <option value="0">Disabled</option>
                         </select>
@@ -96,7 +96,7 @@
                     <div class="col-md-9">
                     <div class="input-group">
                         <select class="form-control" name="type" id="type">
-                        <option value="">Set type for alarm</option>
+                        <option value="">Set type for device</option>
                             <option value="0">Raspberry Pi 3 Model B</option>
                             <option value="1">Raspberry Pi Zero [Any Model]</option>
                             <option value="2">ESP-[Any Model]</option>
