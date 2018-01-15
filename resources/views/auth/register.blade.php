@@ -79,14 +79,14 @@
                                 {!! Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'password-confirm', 'placeholder' => 'Confirm Password', 'required']) !!}
                             </div>
                         </div>
-                        <p>P: 6Lc31kAUAAAAAFQhDEdno7zMnz1TmhWzEQt9GibV</p>
-                        <!--@if(config('settings.reCaptchStatus'))-->
+                       
+                        @if(config('settings.reCaptchStatus'))
                         <div class="form-group">
                             <div class="col-sm-6 col-sm-offset-4">
                                 <div class="g-recaptcha" data-sitekey="6Lc31kAUAAAAAFQhDEdno7zMnz1TmhWzEQt9GibV"></div>
                             </div>
                         </div>
-                        <!--@endif-->
+                        @endif
                         <div class="form-group margin-bottom-2">
                             <div class="col-sm-6 col-sm-offset-4">
                                 <button type="submit" class="btn btn-primary">
