@@ -27,6 +27,7 @@ class Device extends Model
      */
     protected $fillable = [
         'owner_id',
+        'type',
         'name',
         'ip_address',
         'active',

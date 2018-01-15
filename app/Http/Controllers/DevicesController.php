@@ -206,12 +206,14 @@ class DevicesController extends Controller
         $device = Device::where('id',$id)->get();
 
         $ip = $device[0]->ip_address;
+        $type = $device[0]->type;
         $stream = "http://" . $ip  . ":5000/stream";
         $capture = "http://" . $ip  . "/capture";
 
         $data = [
             'stream' => $stream,
             'capture' => $capture,
+            'type' => $type,
             'id' => $id,
         ];
         
@@ -230,6 +232,7 @@ class DevicesController extends Controller
         $device = Device::where('id',$id)->get();
 
         $ip = $device[0]->ip_address;
+        $type = $device[0]->type;
         $stream = "http://" . $ip  . ":5000/stream";
         $capture = "http://" . $ip  . ":5000/capture";
         
@@ -248,6 +251,7 @@ class DevicesController extends Controller
         $data = [
             'stream' => $stream,
             'capture' => $capture,
+            'type' => $type,
             'id' => $id,
             $msg => $msg2,
         ];
@@ -361,6 +365,7 @@ class DevicesController extends Controller
                 'ip_address'                 => 'required|ip|max:255',
                 'mac_address'               => 'required|max:255',
                 'active'               => 'required|max:1',
+                'type'               => 'required|max:1',
             ],
             [
                 'name'         => trans('devices.name'),
@@ -386,6 +391,7 @@ class DevicesController extends Controller
         $device->ip_address = $request->input('ip_address');
         $device->mac_address = $request->input('mac_address');
         $device->active = $request->input('active');
+        $device->type = $request->input('type');
         $device->save();
 
         return redirect('devices')->with('success', trans('devices.createSuccess'));

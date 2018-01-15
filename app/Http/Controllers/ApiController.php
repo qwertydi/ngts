@@ -26,8 +26,12 @@ class ApiController extends Controller
     public $successStatus = 200;
     
     public function login(){
-        //var_dump($_REQUEST);
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+        $lol = request('email');
+        var_dump($lol);
+        //var_dump($_REQUEST['email']);
+        //var_dump($_REQUEST['password']);
+
+        if(Auth::attempt(['email' => $lol, 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             return response()->json(['success' => $success], $this->successStatus);
@@ -65,6 +69,7 @@ class ApiController extends Controller
                 $add->ip_address = $request->ip_address;
                 $add->mac_address = $request->mac_address;
                 $add->active = $request->active;
+                $add->type = $request->type;
                 $add->save();
             }
             
@@ -253,7 +258,8 @@ class ApiController extends Controller
                 'name' => 'required',
                 'ip_address' => 'required',
                 'active' => 'required',
-                'mac_address' => 'required'
+                'mac_address' => 'required',
+                'type' => 'required'
             ]);
             if($validator->fails()){
                 $error = true;

@@ -60,10 +60,20 @@
 											<a class="btn btn-sm btn-default " href="{{ URL::to('devices/' . $device->id . '/surveillance') }}" data-toggle="tooltip" title="Show"><span>Surveillance</span></a>
 											</td>
 											<td>
-											<a class="btn btn-sm btn-default " href="{{ URL::to('devices/' . $device->id . '/pictures') }}" data-toggle="tooltip" title="Show"><span>Pictures</span></a>
+											@if ($device->type == 0 || $device->type == 1) 
+												<a class="btn btn-sm btn-default " href="{{ URL::to('devices/' . $device->id . '/pictures') }}" data-toggle="tooltip" title="Show"><span>Pictures</span></a>
+												@else 
+												<a class="btn btn-sm btn-default " data-toggle="tooltip" title="Show" disabled><span>Not Available</span></a>
+
+											@endif
 											</td>
+											
 											<td>
+											@if ($device->type == 0) 
 												<a class="btn btn-sm btn-success " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Motion History</span></a>
+												@else 
+												<a class="btn btn-sm btn-success " data-toggle="tooltip" title="Show" disabled><span>Not Available</span></a>
+											@endif
 											</td>
 											<!--<td>
 											<a class="btn btn-sm btn-warning " href="{{ URL::to('devices/' . $device->id) }}" data-toggle="tooltip" title="Show"><span>Settings</span></a>

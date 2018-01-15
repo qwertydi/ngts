@@ -91,6 +91,26 @@
                     </div>
                 </div>
 
+                <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
+                    {!! Form::label('type', 'Select type of device', array('class' => 'col-md-3 control-label')); !!}
+                    <div class="col-md-9">
+                    <div class="input-group">
+                        <select class="form-control" name="type" id="type">
+                        <option value="">Set type for alarm</option>
+                            <option value="0">Raspberry Pi 3 Model B</option>
+                            <option value="1">Raspberry Pi Zero [Any Model]</option>
+                            <option value="2">ESP-[Any Model]</option>
+                        </select>
+                        <label class="input-group-addon" for="type"><i class="fa fa-fw type }}" aria-hidden="true"></i></label>
+                    </div>
+                    @if ($errors->has('role'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('role') }}</strong>
+                        </span>
+                    @endif
+                    </div>
+                </div>
+
               {!! Form::button('<i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;' . 'add device', array('class' => 'btn btn-success btn-flat margin-bottom-1 pull-right','type' => 'submit', 'method' => 'POST' )) !!}
 
             {!! Form::close() !!}

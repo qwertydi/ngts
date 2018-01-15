@@ -49,9 +49,14 @@ return [
             'charset'   => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix'    => '',
-            'strict'    => true,
+            'strict'    => false,
             'engine'    => null,
-        ],
+//	    'options'   => [
+//		PDO::MYSQL_ATTR_SSL_CA    => './ssl-certs/ca.pem',
+//		PDO::MYSQL_ATTR_SSL_CERT    => './ssl-certs/client-cert.pem',
+//		PDO::MYSQL_ATTR_SSL_KEY    => './ssl-certs/client-key.pem'
+//            ],
+	],
 
         'pgsql' => [
             'driver'   => 'pgsql',

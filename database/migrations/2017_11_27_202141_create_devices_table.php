@@ -20,6 +20,7 @@ class CreateDevicesTable extends Migration
             $table->string('name');
             $table->ipAddress('ip_address')->nullable();
             $table->boolean('active');
+            $table->integer('type');
             $table->string('mac_address');
         });
     }

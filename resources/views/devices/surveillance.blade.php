@@ -22,7 +22,7 @@
 					<div class="panel-heading">
 						<strong>Stream available on device {{$id}}:</strong>
 
-                        <a href="/devices/" class="btn btn-primary btn-xs pull-right" style="margin-left: 1em;">
+                     	<a href="/devices/" class="btn btn-primary btn-xs pull-right" style="margin-left: 1em;">
 								<i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
 							Back  <span class="hidden-xs">to Devices List</span>
 						</a>
@@ -31,11 +31,12 @@
 								<i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
 							Back  <span class="hidden-xs">to Device {{$id}}</span>
 						</a>
-
+						@if ($type == 0 || $type == 1)
 						<a href="/devices/{{$id}}/surveillance/picture" class="btn btn-warning btn-xs pull-right" style="margin-left: 1em;">
 								<i class="fa fa-fw fa-camera" aria-hidden="true"></i>
 							Capture  <span class="hidden-xs">image on device {{$id}}</span>
 						</a>
+						@endif
 					</div>
 					<div class="panel-body">
 						<div class="table-responsive">
