@@ -126,7 +126,7 @@ class RegisterController extends Controller
         // Desenvolvimento: 
         //$result = $client->post('http://admin:grupo2ngts@10.20.228.65/owncloud/ocs/v1.php/cloud/users', [
         // Produção:
-        $result = $client->post('https://admin:grupo2ngts@localhost/owncloud/ocs/v1.php/cloud/users', [
+        $result = $client->post('https://admin:grupo2ngts@ngts.ddns.net/owncloud/ocs/v1.php/cloud/users', [
         //$result = $client->post('http://admin:grupo2ngts@localhost/owncloud/ocs/v1.php/cloud/users', [
             'form_params' => [
             'userid' => $email,
