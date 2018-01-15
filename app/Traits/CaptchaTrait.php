@@ -11,15 +11,16 @@ trait CaptchaTrait
     {
         $response = Input::get('g-recaptcha-response');
         $remoteip = $_SERVER['REMOTE_ADDR'];
-        $secret = env('RE_CAP_SECRET');
+        $secret = "6Lc31kAUAAAAAPjQ0GP1ZILxn6AZrewJNkzaE1UM";
 
         $recaptcha = new ReCaptcha($secret);
         $resp = $recaptcha->verify($response, $remoteip);
-
+        
         if ($resp->isSuccess()) {
+            //dd($resp);
             return true;
         }
         // prodution put on false
-        return true;
+        return false;
     }
 }

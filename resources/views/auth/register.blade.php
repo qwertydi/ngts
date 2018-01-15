@@ -79,13 +79,14 @@
                                 {!! Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'password-confirm', 'placeholder' => 'Confirm Password', 'required']) !!}
                             </div>
                         </div>
-                        @if(config('settings.reCaptchStatus'))
-                            <div class="form-group">
-                                <div class="col-sm-6 col-sm-offset-4">
-                                    <div class="g-recaptcha" data-sitekey="{{ env('RE_CAP_SITE') }}"></div>
-                                </div>
+                        <p>P: 6Lc31kAUAAAAAFQhDEdno7zMnz1TmhWzEQt9GibV</p>
+                        <!--@if(config('settings.reCaptchStatus'))-->
+                        <div class="form-group">
+                            <div class="col-sm-6 col-sm-offset-4">
+                                <div class="g-recaptcha" data-sitekey="6Lc31kAUAAAAAFQhDEdno7zMnz1TmhWzEQt9GibV"></div>
                             </div>
-                        @endif
+                        </div>
+                        <!--@endif-->
                         <div class="form-group margin-bottom-2">
                             <div class="col-sm-6 col-sm-offset-4">
                                 <button type="submit" class="btn btn-primary">
@@ -94,11 +95,11 @@
                             </div>
                         </div>
 
-                        <p class="text-center margin-bottom-2">
+                        <!--<p class="text-center margin-bottom-2">
                             Or Use Social Logins to Register
                         </p>
 
-                        @include('partials.socials')
+                        @include('partials.socials')-->
 
                     {!! Form::close() !!}
 
@@ -112,6 +113,7 @@
 
 @section('footer_scripts')
 
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 @endsection
