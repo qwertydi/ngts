@@ -26,12 +26,7 @@ class ApiController extends Controller
     public $successStatus = 200;
     
     public function login(){
-        $lol = request('email');
-        var_dump($lol);
-        //var_dump($_REQUEST['email']);
-        //var_dump($_REQUEST['password']);
-
-        if(Auth::attempt(['email' => $lol, 'password' => request('password')])){
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             return response()->json(['success' => $success], $this->successStatus);
