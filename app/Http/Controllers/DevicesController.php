@@ -230,7 +230,7 @@ class DevicesController extends Controller
     public function pictureButton($id){
         $user = Auth::user();
         $device = Device::findOrFail($id)->get();
-
+        //dd($id);
         if(Device::findOrFail($id)->owner_id != $user->id){
             return response()->view('errors.403');
         }
@@ -268,12 +268,12 @@ class DevicesController extends Controller
     public function pictureButton2($id){
         $user = Auth::user();
         $device = Device::findOrFail($id)->get();
-
+        
         if(Device::findOrFail($id)->owner_id != $user->id){
             return response()->view('errors.403');
         }
 
-        $picture = Picture::where('device_id',$id)->get();
+        $device = Device::where('id',$id)->get();
     
         $client = new Client();  
         $ip = $device[0]->ip_address;
@@ -290,7 +290,7 @@ class DevicesController extends Controller
 
         $data = [
             'user' => $user,
-            'picture' => $picture,
+            //'picture' => $picture,
             'id' => $id,
             $msg => $msg2,
         ];
@@ -342,19 +342,19 @@ class DevicesController extends Controller
         return view('devices.device')->with($data);
     }
 
-    public function devicePictureHistory($p_id)
+    public function motionPictureHistory($id,$p_id)
     {
-        $picture = Picture::findOrFail($p_id)->get();
-
+        $picture = Picture::findOrFail($id)->get();
         if ($picture) {
-            $picture = Motion::destroy($p_id);
+            $picture = Picture::destroy($id);
+            //dd($picture);
             $data = 'removed succesfully';
         } else {
             // warning
-            return redirect('/devices/'.$id.'/pictures')->with('error', trans('motion.errorMotionDeleted'));
+            return redirect('/devices/'. $p_id.'/pictures')->with('error', trans('motion.errorMotionDeleted'));
         }
 
-        return redirect('/devices/'.$id.'/pictures')->with('success', trans('motion.motionDeleted')); 
+        return redirect('/devices/'.$p_id.'/pictures')->with('success', trans('motion.motionDeleted')); 
     }
 
     public function addDevice()

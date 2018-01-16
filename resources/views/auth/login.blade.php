@@ -60,11 +60,11 @@
                             </div>
                         </div>
 
-                        <p class="text-center margin-bottom-3">
+                        <!--<p class="text-center margin-bottom-3">
                             Or Login with
                         </p>
 
-                        @include('partials.socials-icons')
+                        @include('partials.socials-icons')-->
 
                     </form>
                 </div>

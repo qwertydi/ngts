@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth', 'activated', 'activity']], function () {
 
     Route::delete('/devices/{id}/deleteHistory/{m_id}', [ 'uses' => 'DevicesController@motionDeleteHistory'])->name('delete.motion');
 
-    Route::delete('/devices/{id}/deletePictureHistory/{m_id}', [ 'uses' => 'DevicesController@motionPictureHistory'])->name('delete.pictureHistory');
+    Route::delete('/devices/{id}/deletePictureHistory/{p_id}', [ 'uses' => 'DevicesController@motionPictureHistory'])->name('delete.pictureHistory');
 
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [

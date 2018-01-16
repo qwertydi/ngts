@@ -46,7 +46,7 @@
 									@foreach ($motion as $m)
 										<tr>
 											<td><a href="/devices/{{$m->device_id}}"</a>{{$m->device_id}}</td>
-											<td>{{ Carbon\Carbon::parse($m->date)->format('d-m-Y H:m') }}</td>
+											<td>{{ Carbon\Carbon::parse($m->date)->format('d-m-Y H:i') }}</td>
 											<td><a href="{{$m->url}}/download">Download link</a></td>
 											<td>
 											{!! Form::open(['method' => 'DELETE','route' => ['delete.motion', $m->device_id,$m->id],'style'=>'display:inline']) !!}

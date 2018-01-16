@@ -55,7 +55,7 @@
 											<td>{{ Carbon\Carbon::parse($p->date)->format('d-m-Y H:i') }}</td>
 											<td><a href="{{$p->url}}/download">Download link</a></td>
 											<td>
-											{!! Form::open(['method' => 'DELETE','route' => ['delete.pictureHistory', $p->device_id,$p->id],'style'=>'display:inline']) !!}
+											{!! Form::open(['method' => 'DELETE','route' => ['delete.pictureHistory', $p->id,$p->device_id],'style'=>'display:inline']) !!}
 												{!! Form::button('<i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> <span class="hidden-xs hidden-sm">Delete</span><span class="hidden-xs hidden-sm hidden-md"> Picture</span>', array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Delete Motion', 'data-message' => 'Are you sure you want to delete this Picture history ?')) !!}
 											{!! Form::close() !!}
 											</td>
